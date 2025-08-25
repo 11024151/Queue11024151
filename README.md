@@ -1,41 +1,41 @@
-# 进程间通信-Queue 11024151
+# 進程間通訊-Queue 11024151
 
 ### 一、Queue的使用
-可以使用multiprocessing模块的Queue实现多进程之间的数据传递，Queue本身是一个消息列队程序，首先用一个小实例来演示一下Queue的工作原理：
+可以使用multiprocessing模組的Queue實作多進程之間的資料傳遞，Queue本身就是一個訊息列隊程序，首先用一個小實例來示範Queue的工作原理：
 ![image](code1.png)
-说明
-初始化Queue()对象时（例如：q=Queue()），若括号中没有指定最大可接收的消息数量，或数量为负值，那么就代表可接受的消息数量没有上限（直到内存的尽头）；
+說明
+初始化Queue()物件時（例如：q=Queue()），若括號中沒有指定最大可接收的訊息數量，或數量為負值，那麼就代表可接受的訊息數量沒有上限（直到記憶體的盡頭）；
 
-Queue.qsize()：返回当前队列包含的消息数量；
+Queue.qsize()：傳回目前佇列包含的訊息數量；
 
-Queue.empty()：如果队列为空，返回True，反之False ；
+Queue.empty()：若佇列為空，則回傳True，反之False ；
 
-Queue.full()：如果队列满了，返回True,反之False；
+Queue.full()：如果佇列滿了，回傳True,反之False；
 
-Queue.get([block[, timeout]])：获取队列中的一条消息，然后将其从列队中移除，block默认值为True；
+Queue.get([block[, timeout]])：取得佇列中的一則訊息，然後將其從列隊移除，block預設值為True；
 
-1）如果block使用默认值，且没有设置timeout（单位秒），消息列队如果为空，此时程序将被阻塞（停在读取状态），直到从消息列队读到消息为止，如果设置了timeout，则会等待timeout秒，若还没读取到任何消息，则抛出"Queue.Empty"异常；
+1）如果block使用預設值，且沒有設定timeout（單位秒），訊息列隊如果為空，此時程式將被阻塞（停在讀取狀態），直到從訊息列隊讀到訊息為止，如果設定了timeout，則會等待timeout秒，若還沒讀取到任何訊息，則拋出"Queue.Empty"異常；
 
-2）如果block值为False，消息列队如果为空，则会立刻抛出"Queue.Empty"异常；
+2）如果block值為False，訊息列隊如果為空，則會立刻拋出"Queue.Empty"異常；
 
-Queue.get_nowait()：相当Queue.get(False)；
+Queue.get_nowait()：相當Queue.get(False)；
 
-Queue.put(item,[block[, timeout]])：将item消息写入队列，block默认值为True；
+Queue.put(item,[block[, timeout]])：將item訊息寫入佇列，block預設值為True；
 
-1）如果block使用默认值，且没有设置timeout（单位秒），消息列队如果已经没有空间可写入，此时程序将被阻塞（停在写入状态），直到从消息列队腾出空间为止，如果设置了timeout，则会等待timeout秒，若还没空间，则抛出"Queue.Full"异常；
+1）如果block使用預設值，且沒有設定timeout（單位秒），訊息列隊如果已經沒有空間可寫入，此時程式將被阻塞（停在寫入狀態），直到從訊息列隊騰出空間為止，如果設定了timeout，則會等待timeout秒，若還沒空間，則拋出"Queue.Full"異常；
 
-2）如果block值为False，消息列队如果没有空间可写入，则会立刻抛出"Queue.Full"异常；
+2）如果block值為False，訊息列隊如果沒有空間可寫入，則會立刻拋出"Queue.Full"異常；
 
-Queue.put_nowait(item)：相当Queue.put(item, False)；
+Queue.put_nowait(item)：相當Queue.put(item, False)；
 
-### 2.Queue实例
-我们以Queue为例，在父进程中创建两个子进程，一个往Queue里写数据，一个从Queue里读数据：
+### 2.Queue實例
+我們以Queue為例，在父進程中建立兩個子進程，一個往Queue裡寫數據，一個從Queue裡讀數據：
 ![image](code2.png)
 
-### 3. 进程池中的Queue
-如果要使用Pool创建进程，就需要使用multiprocessing.Manager()中的Queue()，而不是multiprocessing.Queue()，否则会得到一条如下的错误信息：
+### 3. 進程池中的Queue
+如果要使用Pool建立進程，就需要使用multiprocessing.Manager()中的Queue()，而不是multiprocessing.Queue()，否則會得到一個如下的錯誤訊息：
 
 RuntimeError: Queue objects should only be shared between processes through inheritance.
 
-下面的实例演示了进程池中的进程如何通信：
+下面的實例示範了進程池中的進程如何通訊：
 ![image](code3.png)
