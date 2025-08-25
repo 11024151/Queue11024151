@@ -39,3 +39,5 @@ RuntimeError: Queue objects should only be shared between processes through inhe
 
 下面的實例示範了進程池中的進程如何通訊：
 ![image](code3.png)
+
+版權聲明：本文為CSDN部落客「C-haidragon」的原創文章，遵循CC 4.0 BY-SA版權協議，轉載請附上原文出處連結及本聲明。 原文連結：https://blog.csdn.net/sinat_35360663/article/details/78338205
