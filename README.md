@@ -23,19 +23,15 @@ print(q.full()) #True
 #因为消息列队已满下面的try都会抛出异常，第一个try会等待2秒后再抛出异常，第二个Try会立刻抛出异常
 
 try:
-
     q.put("消息4",True,2)
     
 except:
-
     print("消息列队已满，现有消息数量:%s"%q.qsize())
  
 try:
-
     q.put_nowait("消息4")
     
 except:
-
     print("消息列队已满，现有消息数量:%s"%q.qsize())
 
  
