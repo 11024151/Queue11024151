@@ -64,14 +64,14 @@ Queue.put_nowait(item)：相當Queue.put(item, False)；
 from multiprocessing import Process, Queue
 import os, time, random
  
-# 写数据进程执行的代码:
+#写数据进程执行的代码:
 def write(q):
     for value in ['A', 'B', 'C']:
         print 'Put %s to queue...' % value
         q.put(value)
         time.sleep(random.random())
  
-# 读数据进程执行的代码:
+读数据进程执行的代码:
 def read(q):
     while True:
         if not q.empty():
