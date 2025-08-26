@@ -2,6 +2,36 @@
 
 ### 一、Queue的使用
 可以使用multiprocessing模組的Queue實作多進程之間的資料傳遞，Queue本身就是一個訊息列隊程序，首先用一個小實例來示範Queue的工作原理：
+
+#coding=utf-8
+from multiprocessing import Queue
+q=Queue(3) #初始化一个Queue对象，最多可接收三条put消息
+q.put("消息1") 
+q.put("消息2")
+print(q.full())  #False
+q.put("消息3")
+print(q.full()) #True
+ 
+#因为消息列队已满下面的try都会抛出异常，第一个try会等待2秒后再抛出异常，第二个Try会立刻抛出异常
+try:
+    q.put("消息4",True,2)
+except:
+    print("消息列队已满，现有消息数量:%s"%q.qsize())
+ 
+try:
+    q.put_nowait("消息4")
+except:
+    print("消息列队已满，现有消息数量:%s"%q.qsize())
+ 
+#推荐的方式，先判断消息列队是否已满，再写入
+if not q.full():
+    q.put_nowait("消息4")
+ 
+#读取消息时，先判断消息列队是否为空，再读取
+if not q.empty():
+    for i in range(q.qsize()):
+        print(q.get_nowait())
+        
 ![image](code1.png)
 說明
 初始化Queue()物件時（例如：q=Queue()），若括號中沒有指定最大可接收的訊息數量，或數量為負值，那麼就代表可接受的訊息數量沒有上限（直到記憶體的盡頭）；
