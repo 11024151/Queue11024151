@@ -59,7 +59,7 @@ Queue.put(item,[block[, timeout]])：將item訊息寫入佇列，block預設值�
 
 Queue.put_nowait(item)：相當Queue.put(item, False)；
 
-### 2.Queue實例
+## 2.Queue實例
 我們以Queue為例，在父進程中建立兩個子進程，一個往Queue裡寫數據，一個從Queue裡讀數據：
 
 from multiprocessing import Process, Queue
@@ -100,7 +100,7 @@ if __name__=='__main__':
 
 ![image](code2.png)
 
-### 3. 進程池中的Queue
+## 3. 進程池中的Queue
 如果要使用Pool建立進程，就需要使用multiprocessing.Manager()中的Queue()，而不是multiprocessing.Queue()，否則會得到一個如下的錯誤訊息：
 
 RuntimeError: Queue objects should only be shared between processes through inheritance.
