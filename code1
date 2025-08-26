@@ -1,26 +1,28 @@
 #coding=utf-8
+from multiprocessing import Queue
+q=Queue(3) #初始化一个Queue对象，最多可接收三条put消息
+q.put("消息1") 
+q.put("消息2")
+print(q.full())  #False
+q.put("消息3")
+print(q.full()) #True
  
-#修改import中的Queue为Manager
-from multiprocessing import Manager,Pool
-import os,time,random
+#因为消息列队已满下面的try都会抛出异常，第一个try会等待2秒后再抛出异常，第二个Try会立刻抛出异常
+try:
+    q.put("消息4",True,2)
+except:
+    print("消息列队已满，现有消息数量:%s"%q.qsize())
  
-def reader(q):
-    print("reader启动(%s),父进程为(%s)"%(os.getpid(),os.getppid()))
+try:
+    q.put_nowait("消息4")
+except:
+    print("消息列队已满，现有消息数量:%s"%q.qsize())
+ 
+#推荐的方式，先判断消息列队是否已满，再写入
+if not q.full():
+    q.put_nowait("消息4")
+ 
+#读取消息时，先判断消息列队是否为空，再读取
+if not q.empty():
     for i in range(q.qsize()):
-        print("reader从Queue获取到消息：%s"%q.get(True))
- 
-def writer(q):
-    print("writer启动(%s),父进程为(%s)"%(os.getpid(),os.getppid()))
-    for i in "dongGe":
-        q.put(i)
- 
-if __name__=="__main__":
-    print("(%s) start"%os.getpid())
-    q=Manager().Queue() #使用Manager中的Queue来初始化
-    po=Pool()
-    #使用阻塞模式创建进程，这样就不需要在reader中使用死循环了，可以让writer完全执行完成后，再用reader去读取
-    po.apply(writer,(q,))
-    po.apply(reader,(q,))
-    po.close()
-    po.join()
-    print("(%s) End"%os.getpid())
+        print(q.get_nowait())
