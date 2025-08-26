@@ -1,6 +1,6 @@
 # 進程間通訊-Queue 11024151
 
-### 一、Queue的使用
+## 一、Queue的使用
 可以使用multiprocessing模組的Queue實作多進程之間的資料傳遞，Queue本身就是一個訊息列隊程序，首先用一個小實例來示範Queue的工作原理：
 
 #coding=utf-8
