@@ -60,6 +60,43 @@ Queue.put_nowait(item)：相當Queue.put(item, False)；
 
 ### 2.Queue實例
 我們以Queue為例，在父進程中建立兩個子進程，一個往Queue裡寫數據，一個從Queue裡讀數據：
+
+from multiprocessing import Process, Queue
+import os, time, random
+ 
+# 写数据进程执行的代码:
+def write(q):
+    for value in ['A', 'B', 'C']:
+        print 'Put %s to queue...' % value
+        q.put(value)
+        time.sleep(random.random())
+ 
+# 读数据进程执行的代码:
+def read(q):
+    while True:
+        if not q.empty():
+            value = q.get(True)
+            print 'Get %s from queue.' % value
+            time.sleep(random.random())
+        else:
+            break
+ 
+if __name__=='__main__':
+    # 父进程创建Queue，并传给各个子进程：
+    q = Queue()
+    pw = Process(target=write, args=(q,))
+    pr = Process(target=read, args=(q,))
+    # 启动子进程pw，写入:
+    pw.start()    
+    # 等待pw结束:
+    pw.join()
+    # 启动子进程pr，读取:
+    pr.start()
+    pr.join()
+    # pr进程里是死循环，无法等待其结束，只能强行终止:
+    print ''
+    print '所有数据都写入并且读完'
+
 ![image](code2.png)
 
 ### 3. 進程池中的Queue
@@ -68,6 +105,34 @@ Queue.put_nowait(item)：相當Queue.put(item, False)；
 RuntimeError: Queue objects should only be shared between processes through inheritance.
 
 下面的實例示範了進程池中的進程如何通訊：
+
+#coding=utf-8
+ 
+#修改import中的Queue为Manager
+from multiprocessing import Manager,Pool
+import os,time,random
+ 
+def reader(q):
+    print("reader启动(%s),父进程为(%s)"%(os.getpid(),os.getppid()))
+    for i in range(q.qsize()):
+        print("reader从Queue获取到消息：%s"%q.get(True))
+ 
+def writer(q):
+    print("writer启动(%s),父进程为(%s)"%(os.getpid(),os.getppid()))
+    for i in "dongGe":
+        q.put(i)
+ 
+if __name__=="__main__":
+    print("(%s) start"%os.getpid())
+    q=Manager().Queue() #使用Manager中的Queue来初始化
+    po=Pool()
+    #使用阻塞模式创建进程，这样就不需要在reader中使用死循环了，可以让writer完全执行完成后，再用reader去读取
+    po.apply(writer,(q,))
+    po.apply(reader,(q,))
+    po.close()
+    po.join()
+    print("(%s) End"%os.getpid())
+
 ![image](code3.png)
 
 版權聲明：本文為CSDN部落客「C-haidragon」的原創文章，遵循CC 4.0 BY-SA版權協議，轉載請附上原文出處連結及本聲明。 原文連結：https://blog.csdn.net/sinat_35360663/article/details/78338205
