@@ -75,9 +75,12 @@ Queue.put_nowait(item)：相當Queue.put(item, False)；
 我們以Queue為例，在父進程中建立兩個子進程，一個往Queue裡寫數據，一個從Queue裡讀數據：
 
 from multiprocessing import Process, Queue
+
 import os, time, random
- 
+
+
 #写数据进程执行的代码:
+
 def write(q):
     for value in ['A', 'B', 'C']:
         print 'Put %s to queue...' % value
