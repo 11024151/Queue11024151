@@ -31,7 +31,7 @@ if not q.full():
 if not q.empty():
     for i in range(q.qsize()):
         print(q.get_nowait())
-        
+
 ![image](code1.png)
 說明
 
